@@ -2,6 +2,38 @@
 
 # Swarm (experimental, educational)
 
+Update function_calling with local models, eg.
+functionary/qwen2/Llama3.1
+
+```python
+ollama = OpenAI(
+  base_url="http://localhost:11434/v1",
+  api_key="ollama",  # required, but unused
+)
+
+client = Swarm(client=ollama)
+
+... YOUR AGENT IMPLEMENTATION HERE ...
+
+agent_router = Agent(
+  name="Agent router",
+  instructions="""You are a helpful agent. Determine which agent is best suited
+  to handle the user's request, and transfer the conversation to that agent.
+  this method not handle any argument, just pass content_var to the next agent.""",
+  functions=[
+    transfer_to_agent_weather,
+    transfer_to_agent_volume,
+  ],
+)
+
+response = client.run(
+  agent=agent_router,
+  model_override="dwightfoster03/functionary-small-v3.1",
+  messages=[{"role": "user", "content": text}],
+)
+```
+
+
 An educational framework exploring ergonomic, lightweight multi-agent orchestration.
 
 > [!WARNING]
@@ -14,13 +46,13 @@ An educational framework exploring ergonomic, lightweight multi-agent orchestrat
 Requires Python 3.10+
 
 ```shell
-pip install git+ssh://git@github.com/openai/swarm.git
+pip install git+ssh://git@github.com/yanyaoer/swarm.git
 ```
 
 or
 
 ```shell
-pip install git+https://github.com/openai/swarm.git
+pip install git+https://github.com/yanyaoer/swarm.git
 ```
 
 ## Usage
